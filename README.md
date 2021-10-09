@@ -37,5 +37,6 @@ silent! xmap <silent> <unique> KK <Plug>(ref-keyword)
 
 ## Todo
 
+- Fix the behavior that another buffer will open if we ref twice
 - Set an expiration date for a cached json file
 - Check the name space if there are multiple candidates (if possible)
