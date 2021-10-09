@@ -16,80 +16,88 @@ function! s:clojure_docs_lookup(query) abort
   let l:clojure_docs_json = json_decode(readfile(s:cache_json_path))
 
   " Read json file
-  let l:target = filter(l:clojure_docs_json['vars'], 'v:val["name"] =="'.a:query.'"')
-  if(len(l:target) == 0)
+  let l:targets = filter(l:clojure_docs_json['vars'], 'v:val["name"] =="'.a:query.'"')
+  if(len(l:targets) == 0)
     return 'Not found'
-  elseif(len(l:target) > 1)
-    return 'There are '.len(l:target).'candidates. Abort.'
   endif
 
-  let l:target = l:target[0]
+  let l:results = []
+  for l:target in l:targets
+    " doc
+    let l:doc = [
+          \  '# '.l:target['ns'].'/'.l:target['name'],
+          \  '`('.l:target['name'].' '.l:target['arglists'][0].')`',
+          \  '',
+          \  l:target['doc']
+          \  ]
 
-  " doc
-  let l:doc = [
-        \  '# '.l:target['ns'].'/'.l:target['name'],
-        \  '`('.l:target['name'].' '.l:target['arglists'][0].')`',
-        \  '',
-        \  l:target['doc']
-        \  ]
+    " Example
+    let l:examples = []
+    if(type(l:target['examples']) == 3)
+      let l:examples = ['### '.len(l:target['examples']).' examples']
+      let l:example_num = 1
+      for l:example in l:target['examples']
+        let example_description = [
+              \ '',
+              \ '* Example '.l:example_num,
+              \ '```clojure',
+              \ trim(l:example['body']),
+              \ '```',
+              \ ]
+        let l:examples = l:examples + l:example_description
+        let l:example_num += 1
+      endfor
+    endif
 
-  " Example
-  let l:examples = []
-  if(type(l:target['examples']) == 3)
-    let l:examples = ['### '.len(l:target['examples']).' examples']
-    let l:example_num = 1
-    for l:example in l:target['examples']
-      let example_description = [
-            \ '',
-            \ '* Example '.l:example_num,
-            \ '```clojure',
-            \ trim(l:example['body']),
-            \ '```',
-            \ ]
-      let l:examples = l:examples + l:example_description
-      let l:example_num += 1
-    endfor
-  endif
+    " See also
+    let l:see_also = []
+    if(type(l:target['notes']) == 3)
+      let l:see_also = [
+            \ '### See also',
+            \  join(map(l:target['see-alsos'], '"* ".v:val["to-var"]["ns"]."/".v:val["to-var"]["name"]'), "\n")
+            \]
+    endif
 
-  " See also
-  let l:see_also = [
-        \ '### See also',
-        \  join(map(l:target['see-alsos'], '"* ".v:val["to-var"]["ns"]."/".v:val["to-var"]["name"]'), "\n")
-        \]
+    " Notes
+    let l:notes = []
+    if(type(l:target['notes']) == 3)
+      let l:notes = ['### '.len(l:target['notes']).' notes']
+      let l:note_num = 1
+      for l:note in l:target['notes']
+        let note_description = [
+              \ '',
+              \ '* Note'.l:note_num,
+              \ trim(l:note["body"]),
+              \ ]
+        let l:notes = l:notes + l:note_description
+        let l:note_num += 1
+      endfor
+    endif
 
-  " Notes
-  let l:notes = []
-  if(type(l:target['notes']) == 3)
-    let l:notes = ['### '.len(l:target['notes']).' notes']
-    let l:note_num = 1
-    for l:note in l:target['notes']
-      let note_description = [
-            \ '',
-            \ '* Note'.l:note_num,
-            \ trim(l:note["body"]),
-            \ ]
-      let l:notes = l:notes + l:note_description
-      let l:note_num += 1
-    endfor
-  endif
+    " Deal with new line
+    let l:examples_formatted = []
+    if (len(l:examples) > 0)
+      let l:examples_formatted = [''] + l:examples
+    endif
 
-  " Deal with new line
-  let l:examples_formatted = []
-  if (len(l:examples) > 0)
-    let l:examples_formatted = [''] + l:examples
-  endif
+    let l:see_also_formatted = []
+    if (len(l:see_also) > 0)
+      let l:see_also_formatted = [''] + l:see_also
+    endif
 
-  let l:see_also_formatted = [''] + l:see_also
+    let l:notes_formatted = []
+    if (len(l:notes) > 0)
+      let l:notes_formatted = [''] + l:notes
+    endif
 
-  let l:notes_formatted = []
-  if (len(l:notes) > 0)
-    let l:notes_formatted = [''] + l:notes
-  endif
+    " Final output
+    let l:final_list = l:doc + l:examples_formatted + l:see_also_formatted + l:notes_formatted
+    let l:final_output = join(final_list, "\n")
+    call add(l:results, l:final_output)
+    call add(l:results, '')
+  endfor
 
-  " Final output
-  let l:final_list = l:doc + l:examples_formatted + l:see_also_formatted + l:notes_formatted
-  let l:final_output = join(final_list, "\n")
-  return l:final_output
+  return join(l:results, "\n")
 endfunction
 
 function! s:syntax()
