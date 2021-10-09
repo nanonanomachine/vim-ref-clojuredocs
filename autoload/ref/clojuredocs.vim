@@ -132,7 +132,7 @@ function! ref#clojuredocs#define()
     return copy(s:source)
 endfunction
 
-call ref#register_detection('cojuredocs', 'clojuredocs')
+call ref#register_detection('clojure', 'clojuredocs', 'overwrite')
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
