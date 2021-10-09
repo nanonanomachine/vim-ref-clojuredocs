@@ -37,4 +37,5 @@ silent! xmap <silent> <unique> KK <Plug>(ref-keyword)
 
 ## Todo
 
+- Support multiple candidates
 - Set an expiration date for a cached json file
