@@ -28,7 +28,7 @@ function! s:clojure_docs_lookup(query) abort
           \  '# '.l:target['ns'].'/'.l:target['name'],
           \  '`('.l:target['name'].' '.l:target['arglists'][0].')`',
           \  '',
-          \  l:target['doc']
+          \  '  '.l:target['doc']
           \  ]
 
     " Example
