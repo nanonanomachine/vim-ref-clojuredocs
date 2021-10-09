@@ -76,16 +76,18 @@ function! s:clojure_docs_lookup(query) abort
   " Deal with new line
   let l:examples_formatted = []
   if (len(l:examples) > 0)
-    let l:examples_formatted = ["\n"] + l:examples
+    let l:examples_formatted = [''] + l:examples
   endif
+
+  let l:see_also_formatted = [''] + l:see_also
 
   let l:notes_formatted = []
   if (len(l:notes) > 0)
-    let l:notes_formatted = ["\n"] + l:notes
+    let l:notes_formatted = [''] + l:notes
   endif
 
   " Final output
-  let l:final_list = l:doc + l:examples_formatted + ["\n"] + l:see_also + l:notes_formatted
+  let l:final_list = l:doc + l:examples_formatted + l:see_also_formatted + l:notes_formatted
   let l:final_output = join(final_list, "\n")
   return l:final_output
 endfunction
