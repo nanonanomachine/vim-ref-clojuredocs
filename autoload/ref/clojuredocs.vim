@@ -43,7 +43,7 @@ function! s:clojure_docs_lookup(query) abort
             \ '',
             \ '* Example '.l:example_num,
             \ '```clojure',
-            \ l:example['body'],
+            \ trim(l:example['body']),
             \ '```',
             \ ]
       let l:examples = l:examples + l:example_description
@@ -66,7 +66,7 @@ function! s:clojure_docs_lookup(query) abort
       let note_description = [
             \ '',
             \ '* Note'.l:note_num,
-            \ l:note["body"],
+            \ trim(l:note["body"]),
             \ ]
       let l:notes = l:notes + l:note_description
       let l:note_num += 1
