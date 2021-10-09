@@ -14,6 +14,8 @@ Plug 'nanonanomachine/vim-ref-clojuredocs'
 
 ## Prequisites
 
+- `markdown` syntax is supported
+  -  You can use `markdown` syntax via [sheerun/vim-polyglot](https://github.com/sheerun/vim-polyglot) or [plasticboy/vim-markdown](https://github.com/plasticboy/vim-markdown)
 - `curl` is installed
 - https://github.com/thinca/vim-ref is installed
 
@@ -25,6 +27,5 @@ Plug 'nanonanomachine/vim-ref-clojuredocs'
 
 ## Todo
 
-- Markdown syntax highlight setting
 - More doucumentation
 - Set an expiration date for a cached json file

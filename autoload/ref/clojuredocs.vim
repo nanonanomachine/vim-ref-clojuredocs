@@ -11,7 +11,6 @@ function! s:download_clojuredocs_json()
   endif
 endfunction
 
-
 function! s:clojure_docs_lookup(query) abort
   call s:download_clojuredocs_json()
   let l:clojure_docs_json = json_decode(readfile(s:cache_json_path))
@@ -91,12 +90,27 @@ function! s:clojure_docs_lookup(query) abort
   return l:final_output
 endfunction
 
+function! s:syntax()
+  if exists('b:current_syntax') && b:current_syntax == 'markdown'
+    return
+  endif
+
+  syntax clear
+  set syntax=markdown
+
+  let b:current_syntax = 'markdown'
+endfunction
+
 function! s:source.available()
     return executable('curl')
 endfunction
 
 function! s:source.get_body(query)
     return s:clojure_docs_lookup(a:query)
+endfunction
+
+function! s:source.opened(query)
+  call s:syntax()
 endfunction
 
 function! s:source.get_keyword()
