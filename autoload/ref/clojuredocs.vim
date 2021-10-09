@@ -96,7 +96,7 @@ function! s:syntax()
   endif
 
   syntax clear
-  set syntax=markdown
+  set filetype=markdown
 
   let b:current_syntax = 'markdown'
 endfunction
