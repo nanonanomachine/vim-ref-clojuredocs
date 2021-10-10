@@ -30,9 +30,16 @@ Press `K` on the function you want to check the document, or run the following c
 If you use clojure plugins such as [liquidz/vim-iced](https://github.com/liquidz/vim-iced) or [tpope/vim-fireplace](https://github.com/tpope/vim-fireplace) and use their default key mappings, vim-ref's default key mapping `K` will be overwritten. You need to disable their default key mappings or reassign vim-ref's key map as follows:
 
 ```vim
-" Workaround for overwritten the default key mapping by vim-iced
+" Workaround for overwritten the default key mapping
 silent! nmap <silent> <unique> KK <Plug>(ref-keyword)
 silent! xmap <silent> <unique> KK <Plug>(ref-keyword)
+```
+
+[liquidz/vim-iced](https://github.com/liquidz/vim-iced) will not assign a mapping if there's an already `<Plug>` mapping.
+You can disable `K` mapping as follows:
+
+```vim
+nmap <Nop>(disable_document_pop_open) <Plug>(iced_document_popup_open)
 ```
 
 ## Todo
