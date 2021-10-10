@@ -39,7 +39,7 @@ silent! xmap <silent> <unique> KK <Plug>(ref-keyword)
 You can disable `K` mapping as follows:
 
 ```vim
-nmap <Nop>(disable_document_pop_open) <Plug>(iced_document_popup_open)
+nmap <Nop>(disable_document_popup_open) <Plug>(iced_document_popup_open)
 ```
 
 ## Todo
